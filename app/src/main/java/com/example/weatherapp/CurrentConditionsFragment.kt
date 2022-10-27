@@ -23,5 +23,4 @@ class CurrentConditionsFragment : Fragment(R.layout.fragment_current_coniditions
 
         }
     }
-
 }
