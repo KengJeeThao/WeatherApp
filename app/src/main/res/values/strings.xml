@@ -10,5 +10,8 @@
     <string name="pressure">Pressure 1023 hPa</string>
     <string name="forecast">Forecast</string>
     <string name="degree_symbol">%d°</string>
+    <string name="feels_like" />
+    <string name="sunrise" />
+    <string name="sunset" />
 
 </resources>
