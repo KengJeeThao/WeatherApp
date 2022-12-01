@@ -7,16 +7,21 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.weatherapp.R
 import com.example.weatherapp.models.DateTime
 import com.example.weatherapp.models.Forecastsdata
+import com.example.weatherapp.models.LatitudeLongitude
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.format.DateTimeFormatter
@@ -29,11 +34,15 @@ var t_zone: Int = 0
 
 @Composable
 private fun ForecastConditionsContent(
-    forecastConditions: Forecastsdata,
-)   {
-    t_zone = forecastConditions.city.timeZone
-    LazyColumn {
-        items(items = forecastConditions.timeData) { item: DateTime -> ForecastRow(item = item) }
+    latitudeLongitude: LatitudeLongitude?,
+    viewModel: ForecastConditionsViewModel  = hiltViewModel(),
+    ) {
+        val state by viewModel.forecastConditions.collectAsState(null)
+
+    if (latitudeLongitude != null) {
+        LaunchedEffect(Unit) { viewModel.fetchMyLocationData(latitudeLongitude) }
+    } else {
+        LaunchedEffect(Unit) { viewModel.fetchData() }
     }
 }
 
@@ -91,11 +100,10 @@ private fun ForecastRow(item: DateTime) {
 @Preview
 @Composable
 private fun ForecastScreenPreview() {
-    ForecastConditions()
 
 }
 
 @Composable
-fun ForecastConditions() {
+fun ForecastConditions(latitudeLongitude: LatitudeLongitude?) {
     TODO("Not yet implemented")
 }

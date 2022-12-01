@@ -13,5 +13,6 @@
     <string name="feels_like" />
     <string name="sunrise" />
     <string name="sunset" />
+    <string name="get_my_location">"Get Weather for My Location"</string>
 
 </resources>
