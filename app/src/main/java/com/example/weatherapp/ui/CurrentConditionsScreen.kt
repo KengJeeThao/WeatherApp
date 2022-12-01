@@ -23,28 +23,35 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.weatherapp.R
 import com.example.weatherapp.models.CurrentConditions
+import com.example.weatherapp.models.LatitudeLongitude
 
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun CurrentConditions(
+    latitudeLongitude: LatitudeLongitude?,
     viewModel: CurrentConditionsViewModel = hiltViewModel(),
+    onMyLocationButtonClick: () -> Unit,
     onForecastButtonClick: () -> Unit,
     cityName: String,
     temperature: String,
 )  {
     val state by viewModel.currentConditions.collectAsState(null)
-    LaunchedEffect(Unit) {
-        viewModel.fetchData()
+    if (latitudeLongitude != null) {
+        LaunchedEffect(Unit) {
+            viewModel.fetchCurrentLocationData(latitudeLongitude)
+        }
+    } else {
+        LaunchedEffect(Unit){
+            viewModel.fetchData()
+        }
     }
 
     Scaffold(
         topBar = { AppBar(title = stringResource(id = R.string.app_name)) }
     ) {
         state?.let {
-            CurrentConditionsContent(it) {
-                onForecastButtonClick()
-            }
+            CurrentConditionsContent(it, onMyLocationButtonClick, onForecastButtonClick)
         }
     }
 }
@@ -52,6 +59,7 @@ fun CurrentConditions(
 @Composable
 private fun CurrentConditionsContent(
     currentConditions: CurrentConditions,
+    onMyLocationButtonClick: () -> Unit,
     onForecastButtonClick: () -> Unit,
 ){
     Column(
@@ -138,10 +146,6 @@ private fun CurrentConditionsContent(
 @Preview
 @Composable
 fun CurrentConditionsPreview() {
-    CurrentConditions(
-        onForecastButtonClick = {},
-        cityName = stringResource(id = R.string.city_name),
-        temperature = stringResource(id = R.string.current_temp, 56)
-    )
+
 }
 

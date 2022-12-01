@@ -10,17 +10,34 @@ interface OpenWeatherMapApi {
     @GET("data/2.5/weather")
     suspend fun getCurrentConditions(
         @Query("zip") zip: String,
-        @Query("appid") apiKey: String,
+        @Query("appid") apiKey: String = "4d6384a89b5f2053860745fff021775f",
         @Query("units") units: String = "imperial",
         ) : CurrentConditions
+
+    suspend fun getCurrentConditions1(
+        @Query("lat") latitude: Float,
+        @Query("lon") longitude: Float,
+        @Query("appid") apiKey: String = "4d6384a89b5f2053860745fff021775f",
+        @Query("units") units: String = "imperial"
+    ) : CurrentConditions
 
     @GET("data/2.5/forecast/daily")
     suspend fun getForecastConditions(
         @Query("zip") zip: String,
-        @Query("appid") apiKey: String,
+        @Query("appid") apiKey: String = "4d6384a89b5f2053860745fff021775f",
         @Query("units") units: String = "imperial",
     ) : Forecastsdata
 
+    @GET("data/2.5/forecast/daily")
+    suspend fun getForecastTemperatures(
+        @Query("lat") latitude: Float,
+        @Query("lon") longitude: Float,
+        @Query("appid") apiKey: String = "4d6384a89b5f2053860745fff021775f",
+        @Query("units") unit: String = "imperial"
+    ) : Forecastsdata
+
+    abstract fun getForecastTemperatures(): Forecastsdata
     abstract fun getCurrentConditions(): CurrentConditions
-    abstract fun getForecastConditions(): Forecastsdata
+
+
 }
